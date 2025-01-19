@@ -10,13 +10,18 @@ const uint8_t PINOS_DA_LINHA[linhas] = {8, 7, 6, 5};
 const uint8_t PINOS_DA_COLUNA[colunas] = {4, 3, 2, 1};
 
 const char key_map[linhas][colunas] = { // criação da função para fazer o mapeamento de teclas nas linhas e colunas
-    {'1', '2', '3', 'A'},
+    {'1,', '2', '3', 'A'},
 
-    {'4', '5', '6', 'B'},
+    {'4,', '5', '6', 'B'},
 
-    {'7', '8', '9', 'C'},
+    {'7,', '8', '9', 'C'},
 
-    {'*', '0', '#', 'D'}};
+    {'*,', '0', '#', 'D'}};
+
+    //Definição dos Pinos dos LEDs
+const uint LED_G = 11;
+const uint LED_B = 12;
+const uint LED_R = 13;
 
 void keypad_init()
 {
@@ -26,7 +31,7 @@ void keypad_init()
     { // percorre as linhas
         gpio_init(PINOS_DA_LINHA[i]);
         gpio_set_dir(PINOS_DA_LINHA[i], GPIO_OUT);
-        gpio_put(PINOS_DA_LINHA[i], 0);
+        gpio_put(PINOS_DA_LINHA, 0);
     }
     for (int j = 0; j < colunas; j++)
     { // percorre as colunas
