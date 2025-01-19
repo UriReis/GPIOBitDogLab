@@ -39,6 +39,13 @@ void keypad_init()
         gpio_set_dir(PINOS_DA_COLUNA[j], GPIO_OUT);
         gpio_put(PINOS_DA_COLUNA[j], 0);
     }
+    //Inicialização dos Pino dos LEDs
+    gpio_init(LED_G);
+    gpio_set_dir(LED_G, GPIO_OUT);
+    gpio_init(LED_B);
+    gpio_set_dir(LED_B, GPIO_OUT);
+    gpio_init(LED_R);
+    gpio_set_dir(LED_R, GPIO_OUT);
 }
 char read_keypad()
 {
