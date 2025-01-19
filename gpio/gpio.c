@@ -110,7 +110,7 @@ int main()
                 // LED OFF
                 break;
             case '#':
-                // LED OFF
+                // Buzzer
                 break;
 
             case 'D':
