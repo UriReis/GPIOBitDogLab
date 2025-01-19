@@ -26,7 +26,7 @@ void keypad_init()
     { // percorre as linhas
         gpio_init(PINOS_DA_LINHA[i]);
         gpio_set_dir(PINOS_DA_LINHA[i], GPIO_OUT);
-        gpio_put(PINOS_DA_LINHA, 0);
+        gpio_put(PINOS_DA_LINHA[i], 0);
     }
     for (int j = 0; j < colunas; j++)
     { // percorre as colunas
