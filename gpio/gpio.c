@@ -1,53 +1,129 @@
-/**
- * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
+#include <stdio.h>
 #include "pico/stdlib.h"
 
-// Pico W devices use a GPIO on the WIFI chip for the LED,
-// so when building for Pico W, CYW43_WL_GPIO_LED_PIN will be defined
-#ifdef CYW43_WL_GPIO_LED_PIN
-#include "pico/cyw43_arch.h"
-#endif
+#define linhas 4  // Definindo Linhas da Matriz
+#define colunas 4 // Definindo colunas da Matriz
 
-#ifndef LED_DELAY_MS
-#define LED_DELAY_MS 250
-#endif
+// Criação de matriz para ler linha e coluna do programa.
 
-// Perform initialisation
-int pico_led_init(void) {
-#if defined(PICO_DEFAULT_LED_PIN)
-    // A device like Pico that uses a GPIO for the LED will define PICO_DEFAULT_LED_PIN
-    // so we can use normal GPIO functionality to turn the led on and off
-    gpio_init(PICO_DEFAULT_LED_PIN);
-    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    return PICO_OK;
-#elif defined(CYW43_WL_GPIO_LED_PIN)
-    // For Pico W devices we need to initialise the driver etc
-    return cyw43_arch_init();
-#endif
-}
+const uint8_t PINOS_DA_LINHA[linhas] = {8, 7, 6, 5};
+const uint8_t PINOS_DA_COLUNA[colunas] = {4, 3, 2, 1};
 
-// Turn the led on or off
-void pico_set_led(bool led_on) {
-#if defined(PICO_DEFAULT_LED_PIN)
-    // Just set the GPIO on or off
-    gpio_put(PICO_DEFAULT_LED_PIN, led_on);
-#elif defined(CYW43_WL_GPIO_LED_PIN)
-    // Ask the wifi "driver" to set the GPIO on or off
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_on);
-#endif
-}
+const char key_map[linhas][colunas] = { // criação da função para fazer o mapeamento de teclas nas linhas e colunas
+    {'1,', '2', '3', 'A'},
 
-int main() {
-    int rc = pico_led_init();
-    hard_assert(rc == PICO_OK);
-    while (true) {
-        pico_set_led(true);
-        sleep_ms(LED_DELAY_MS);
-        pico_set_led(false);
-        sleep_ms(LED_DELAY_MS);
+    {'4,', '5', '6', 'B'},
+
+    {'7,', '8', '9', 'C'},
+
+    {'*,', '0', '#', 'D'}};
+
+void keypad_init()
+{
+    // Implementacao dos LEDS
+
+    for (int i = 0; i < linhas; i++)
+    { // percorre as linhas
+        gpio_init(PINOS_DA_LINHA[i]);
+        gpio_set_dir(PINOS_DA_LINHA[i], GPIO_OUT);
+        gpio_put(PINOS_DA_LINHA, 0);
     }
+    for (int j = 0; j < colunas; j++)
+    { // percorre as colunas
+        gpio_init(PINOS_DA_COLUNA[j]);
+        gpio_set_dir(PINOS_DA_COLUNA[j], GPIO_OUT);
+        gpio_put(PINOS_DA_COLUNA[j], 0);
+    }
+}
+char read_keypad()
+{
+    for (int linha = 0; linha < linhas; linha++)
+    {
+        gpio_put(PINOS_DA_LINHA[linha], 1);
+        for (int coluna = 0; coluna < colunas; coluna++)
+        {
+            if (gpio_get(PINOS_DA_COLUNA[coluna]))
+            {
+                gpio_put(PINOS_DA_LINHA[linha], 0);
+                return key_map[linha][coluna];
+            }
+        }
+        gpio_put(PINOS_DA_LINHA[linha], 0);
+    }
+    return '\0';
+}
+
+int main()
+{
+    stdio_init_all();
+    keypad_init();
+
+    while (true)
+    {
+        char key = read_keypad();
+        if (key != '\0')
+        {
+            printf("Tecla pressionada: %c\n", key);
+
+            switch (key)
+            {
+            case '1':
+                // LED OFF
+                break;
+            case '2':
+                // LED OFF
+                break;
+            case '3':
+                // LED OFF
+                break;
+            case 'A':
+                // LED VERMELHO ON
+                break;
+
+            case '4':
+                // LED OFF
+                break;
+            case '5':
+                // LED OFF
+                break;
+            case '6':
+                // LED OFF
+                break;
+            case 'B':
+                // LED AZUL ON
+                break;
+            case '7':
+                // LED OFF
+            case '8':
+                // LED OFF
+                break;
+            case '9':
+                // LED OFF
+                break;
+            case 'C':
+                // LED VERDE ON
+                break;
+            case '*':
+                // LED OFF
+                break;
+            case '0':
+                // LED OFF
+                break;
+            case '#':
+                // LED OFF
+                break;
+
+            case 'D':
+
+                // LED ON VERMELHO,VERDE E AZUL
+
+                break;
+            default:
+                // LED OFF
+                break;
+            }
+        }
+        sleep_ms(100);
+    }
+    return 0;
 }
