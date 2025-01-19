@@ -110,7 +110,7 @@ int main()
                 // LED OFF
                 break;
             case '#':
-                // LED OFF
+                // Buzzer
                 break;
 
             case 'D':
@@ -123,7 +123,7 @@ int main()
                 break;
             }
         }
-        sleep_ms(100);
+        sleep_ms(100); 
     }
     return 0;
 }
