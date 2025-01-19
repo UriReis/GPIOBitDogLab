@@ -166,7 +166,9 @@ int main()
                 gpio_put(LED_G, 0);
                 break;
             case '#':
+
                 // Buzzers
+                
                 break;
 
             case 'D':
@@ -189,7 +191,7 @@ int main()
                 break;
             }
         }
-        sleep_ms(100);
+        sleep_ms(100); 
     }
     return 0;
 }
